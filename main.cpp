@@ -1,118 +1,97 @@
 #include <iostream>
-
 using namespace std;
 
-struct temp
-{
-    int data;
-    temp* next;
-};
-
-temp* createonelist(int data)
-{
-    temp* newnode = new temp;
-    newnode->data = data;
-    newnode->next = NULL;
-    return newnode;
-}
-
-temp* createLinkedList(int num)
-{
-    temp* head = NULL;
-    int n;
-
-    for (int i = 0; i <= num; i++)
-    {
-        cout << "Enter the data of node " << i+1 << ": ";
-        cin >> n;
-        temp* newnode = createonelist(n);
-
-        if (head == NULL)
-        {
-            head = newnode;
-        }
-        else
-        {
-            temp* t = head;
-            while (t->next != NULL)
-            {
-                t = t->next;
-            }
-            t->next = newnode;
-        }
-    }
-    return head;
-}
-
-void swap(temp* a, temp* b)
+struct maliste
 {
     int x;
-    x = a->data;
-    a->data = b->data;
-    b->data = x;
-}
-temp* reorderthelist(temp* head)
+    struct maliste* next;
+};
+
+maliste* ajoute(maliste* tete, int val)
 {
-    temp* p = head;
-
-    while (p != NULL)
+    maliste* elem = new maliste;
+    if (elem == NULL)
     {
-        temp* minNode = p;
-        temp* q = p->next;
+        exit(0);
+    }
+    elem->x = val;
+    elem->next = tete;
+    tete = elem;
+    return tete;
+}
 
-        while (q != NULL)
-        {
-            if (q->data < minNode->data)
-            {
-                minNode = q;
-            }
-            q = q->next;
-        }
+void affiche(maliste* tete)
+{
+    maliste* t;
+    t = tete;
+    while (t != NULL)
+    {
+        cout << t->x << " ";
+        t = t->next;
+    }
+    cout << endl;
+}
 
-        swap(p, minNode);
-        p = p->next;
+maliste* sup(maliste* tete, int m)
+{
+    if (tete == NULL)
+    {
+        cout << "Liste vide" << endl;
+        return tete;
     }
 
-    return head;
-}
-
-
-void show(temp* head)
-{
-    if (head == NULL)
+    if (m == 1)
     {
-        cout << "The list is empty." << endl;
+        maliste* p = tete;
+        tete = tete->next;
+        delete (p);
     }
     else
     {
-        temp* emp = head;
-        while (emp != NULL)
+        maliste* p = tete;
+        maliste* l = NULL;
+        int i = 1;
+        while (p != NULL && i != m)
         {
-            cout << " " << emp->data;
-            emp = emp->next;
+            l = p;
+            p = p->next;
+            i = i + 1;
         }
-        cout << endl;
+        if (i == m && p != NULL)
+        {
+            l->next = p->next;
+            delete (p);
+        }
+        else
+        {
+            cout << "Position n'existe pas" << endl;
+        }
     }
+    return tete;
 }
 
 int main()
 {
-    int malist;
-    cout << "Enter the number of lists: " << endl;
-    cin >> malist;
+    maliste* tete = NULL;
+    int a, b, c, d, k;
 
-    temp* head = createLinkedList(malist);
-    cout << "Original list: ";
-    show(head);
+    cout << "Entrez les valeurs que vous voulez ajouter :" << ;
+    cin >> a >> b >> c >> d;
 
-    head = reorderthelist(head);
-    cout << "sorted list: ";
-    show(head);
+    tete = ajoute(tete, a);
+    tete = ajoute(tete, b);
+    tete = ajoute(tete, c);
+    tete = ajoute(tete, d);
+
+    cout << "L'affichage :" << endl;
+    affiche(tete);
+
+    cout << "Entrez la position de suppression :";
+    cin >> k;
+    tete = sup(tete, k);
+
+    cout << "Nouvel affichage :" << endl;
+    affiche(tete);
 
     return 0;
 }
-
-
-
-
-
